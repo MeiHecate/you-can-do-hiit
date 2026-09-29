@@ -28,7 +28,7 @@ Le projet est dans `expo/` :
 - `app/` : les écrans, rangés par onglet (accueil, exercices, progrès, réglages) avec expo-router.
 - `contexts/` : l'état de l'entraînement (séances, série de jours, favoris, réglages, notifications) et la langue.
 - `constants/` : couleurs et traductions.
-- `mocks/` : la bibliothèque d'exercices et la génération de la séance du jour.
+- `data/` : la bibliothèque d'exercices et la génération de la séance du jour.
 - `types/` : les types partagés.
 
 ## Lancer le projet

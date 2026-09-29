@@ -11,7 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Clock, Zap, ChevronDown, ChevronUp, Heart } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import Colors from '@/constants/colors';
-import { getTranslatedExercises } from '@/mocks/exercises';
+import { getTranslatedExercises } from '@/data/exercises';
 import { getExerciseIcon } from '@/utils/icons';
 import { ExerciseCategory, Difficulty } from '@/types/exercise';
 import { useLanguage } from '@/contexts/LanguageContext';

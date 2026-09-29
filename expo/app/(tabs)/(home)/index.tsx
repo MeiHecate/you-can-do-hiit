@@ -14,7 +14,7 @@ import * as Haptics from 'expo-haptics';
 import Colors from '@/constants/colors';
 import { useWorkout } from '@/contexts/WorkoutContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { generateDailyWorkout, motivationalQuotes, getTranslatedExercise } from '@/mocks/exercises';
+import { generateDailyWorkout, motivationalQuotes, getTranslatedExercise } from '@/data/exercises';
 import { getExerciseIcon } from '@/utils/icons';
 import { Exercise, CompletedWorkout } from '@/types/exercise';
 
