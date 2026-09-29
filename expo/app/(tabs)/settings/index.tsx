@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Bell, Clock, Target, ChevronRight, Info, Globe } from 'lucide-react-native';
+import { Bell, Clock, Target, ChevronRight, Info, Globe, Shield } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
+import * as WebBrowser from 'expo-web-browser';
 import Colors from '@/constants/colors';
 import { useWorkout, requestNotificationPermissions } from '@/contexts/WorkoutContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -69,6 +70,11 @@ export default function SettingsScreen() {
     },
     [setLanguage]
   );
+
+  const handlePrivacyPolicy = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    WebBrowser.openBrowserAsync('https://maelrochard.com/privacy');
+  }, []);
 
   const formatTime = (hour: number, minute: number) => {
     return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
@@ -267,6 +273,20 @@ export default function SettingsScreen() {
                 </View>
               </View>
             </View>
+
+            <View style={styles.divider} />
+
+            <TouchableOpacity style={styles.settingRow} onPress={handlePrivacyPolicy}>
+              <View style={styles.settingLeft}>
+                <View style={[styles.iconBox, { backgroundColor: 'rgba(99,160,255,0.15)' }]}>
+                  <Shield size={18} color="#63A0FF" />
+                </View>
+                <View>
+                  <Text style={styles.settingLabel}>{t.settings.privacyPolicy}</Text>
+                </View>
+              </View>
+              <ChevronRight size={18} color={Colors.dark.textTertiary} />
+            </TouchableOpacity>
           </View>
         </View>
 

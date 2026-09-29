@@ -75,6 +75,7 @@ export interface Translations {
     language: string;
     languageLabel: string;
     footerText: string;
+    privacyPolicy: string;
   };
   notifications: {
     title: string;
@@ -158,6 +159,7 @@ const en: Translations = {
     language: 'LANGUAGE',
     languageLabel: 'App language',
     footerText: "Short exercises, no equipment, to move every day.\nYou don't need to be an athlete, just consistent.",
+    privacyPolicy: 'Privacy policy',
   },
   notifications: {
     title: "Time to move!",
@@ -241,6 +243,7 @@ const fr: Translations = {
     language: 'LANGUE',
     languageLabel: 'Langue de l\'application',
     footerText: "Exercices courts, sans matériel, pour bouger chaque jour.\nPas besoin d'être un athlète, juste constant.",
+    privacyPolicy: 'Politique de confidentialité',
   },
   notifications: {
     title: "C'est l'heure de bouger !",
