@@ -158,6 +158,10 @@ export default function HomeScreen() {
   }, [slideAnim]);
 
   const currentExercise = dailyExercises[currentExerciseIndex];
+  const nextExercise = useMemo(() => {
+    const next = dailyExercises[currentExerciseIndex + 1];
+    return next ? getTranslatedExercise(next, language) : null;
+  }, [dailyExercises, currentExerciseIndex, language]);
 
   const progressWidth = progressAnim.interpolate({
     inputRange: [0, 1],
@@ -212,14 +216,21 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {isResting && currentExerciseIndex < dailyExercises.length - 1 && (
+        {isResting && nextExercise && (
           <View style={styles.nextExercisePreview}>
             <Text style={styles.nextLabel}>{t.home.next}</Text>
             <View style={styles.nextExerciseCard}>
-              {getExerciseIcon(dailyExercises[currentExerciseIndex + 1].icon, 28, Colors.dark.accent)}
-              <Text style={styles.nextExerciseName}>
-                {getTranslatedExercise(dailyExercises[currentExerciseIndex + 1], language).name}
-              </Text>
+              {getExerciseIcon(nextExercise.icon, 28, Colors.dark.accent)}
+              <Text style={styles.nextExerciseName}>{nextExercise.name}</Text>
+            </View>
+            {/* Show how to do the next exercise during the rest, so the user can get into position. */}
+            <View style={[styles.instructionContainer, styles.nextInstructions]}>
+              {nextExercise.instructions.map((instruction, idx) => (
+                <View key={idx} style={styles.instructionRow}>
+                  <View style={styles.instructionDot} />
+                  <Text style={styles.instructionText}>{instruction}</Text>
+                </View>
+              ))}
             </View>
           </View>
         )}
@@ -602,6 +613,11 @@ const styles = StyleSheet.create({
   nextExercisePreview: {
     alignItems: 'center' as const,
     paddingBottom: 40,
+  },
+  nextInstructions: {
+    alignSelf: 'stretch' as const,
+    marginTop: 20,
+    paddingBottom: 0,
   },
   nextLabel: {
     fontSize: 12,
