@@ -11,6 +11,7 @@ import { Flame, Clock, Zap, Calendar, TrendingUp, Award } from 'lucide-react-nat
 import Colors from '@/constants/colors';
 import { useWorkout } from '@/contexts/WorkoutContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { toDateKey, startOfWeek } from '@/utils/date';
 
 export default function ProgressScreen() {
   const insets = useSafeAreaInsets();
@@ -25,19 +26,15 @@ export default function ProgressScreen() {
   } = useWorkout();
 
   const weekActivity = useMemo(() => {
-    const now = new Date();
-    const startOfWeek = new Date(now);
-    const day = now.getDay();
-    const diff = day === 0 ? 6 : day - 1;
-    startOfWeek.setDate(now.getDate() - diff);
-    startOfWeek.setHours(0, 0, 0, 0);
+    const monday = startOfWeek();
+    const today = toDateKey();
 
     return t.progress.weekdays.map((label, idx) => {
-      const date = new Date(startOfWeek);
-      date.setDate(startOfWeek.getDate() + idx);
-      const dateStr = date.toISOString().split('T')[0];
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + idx);
+      const dateStr = toDateKey(date);
       const done = completedWorkouts.some((w) => w.date === dateStr);
-      const isToday = dateStr === new Date().toISOString().split('T')[0];
+      const isToday = dateStr === today;
       return { label, done, isToday };
     });
   }, [completedWorkouts, t]);
@@ -147,7 +144,7 @@ export default function ProgressScreen() {
                 <View style={styles.historyDate}>
                   <Calendar size={14} color={Colors.dark.accent} />
                   <Text style={styles.historyDateText}>
-                    {new Date(workout.date).toLocaleDateString(dateLocale, {
+                    {new Date(`${workout.date}T00:00`).toLocaleDateString(dateLocale, {
                       weekday: 'short',
                       day: 'numeric',
                       month: 'short',

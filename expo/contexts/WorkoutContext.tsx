@@ -7,6 +7,7 @@ import * as Notifications from 'expo-notifications';
 import { CompletedWorkout, WorkoutSettings } from '@/types/exercise';
 import { translations } from '@/constants/i18n';
 import type { Language } from '@/constants/i18n';
+import { toDateKey, startOfWeek } from '@/utils/date';
 
 const STORAGE_KEYS = {
   COMPLETED_WORKOUTS: 'completed_workouts',
@@ -34,18 +35,15 @@ const DEFAULT_STREAK: StreakData = {
   lastWorkoutDate: null,
 };
 
-function getDateString(date: Date = new Date()): string {
-  return date.toISOString().split('T')[0];
-}
 
 function isYesterday(dateStr: string): boolean {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  return getDateString(yesterday) === dateStr;
+  return toDateKey(yesterday) === dateStr;
 }
 
 function isToday(dateStr: string): boolean {
-  return getDateString() === dateStr;
+  return toDateKey() === dateStr;
 }
 
 export const [WorkoutProvider, useWorkout] = createContextHook(() => {
@@ -111,7 +109,7 @@ export const [WorkoutProvider, useWorkout] = createContextHook(() => {
       await AsyncStorage.setItem(STORAGE_KEYS.COMPLETED_WORKOUTS, JSON.stringify(updated));
 
       const currentStreak = streakQuery.data ?? DEFAULT_STREAK;
-      const today = getDateString();
+      const today = toDateKey();
       let newStreak: StreakData;
 
       if (currentStreak.lastWorkoutDate === today) {
@@ -157,16 +155,13 @@ export const [WorkoutProvider, useWorkout] = createContextHook(() => {
   const streak = useMemo(() => streakQuery.data ?? DEFAULT_STREAK, [streakQuery.data]);
 
   const todayCompleted = useMemo(() => {
-    const today = getDateString();
+    const today = toDateKey();
     return completedWorkouts.some((w) => w.date === today);
   }, [completedWorkouts]);
 
   const thisWeekWorkouts = useMemo(() => {
-    const now = new Date();
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - now.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
-    return completedWorkouts.filter((w) => new Date(w.date) >= startOfWeek);
+    const monday = toDateKey(startOfWeek());
+    return completedWorkouts.filter((w) => w.date >= monday);
   }, [completedWorkouts]);
 
   const totalWorkouts = completedWorkouts.length;

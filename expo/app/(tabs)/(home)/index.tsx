@@ -16,6 +16,7 @@ import { useWorkout } from '@/contexts/WorkoutContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { generateDailyWorkout, motivationalQuotes, getTranslatedExercise } from '@/data/exercises';
 import { getExerciseIcon } from '@/utils/icons';
+import { toDateKey } from '@/utils/date';
 import { Exercise, CompletedWorkout } from '@/types/exercise';
 
 export default function HomeScreen() {
@@ -129,7 +130,7 @@ export default function HomeScreen() {
 
     const workout: CompletedWorkout = {
       id: Date.now().toString(),
-      date: new Date().toISOString().split('T')[0],
+      date: toDateKey(),
       exercises: dailyExercises,
       totalDuration: totalDuration,
       totalCalories: totalCalories,
