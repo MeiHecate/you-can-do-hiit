@@ -11,6 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Play, CheckCircle, Clock, Flame as FlameIcon, Trophy, RefreshCw } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import Colors from '@/constants/colors';
 import { useWorkout } from '@/contexts/WorkoutContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -106,6 +107,15 @@ export default function HomeScreen() {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [timeLeft, activeWorkout, isResting, currentExerciseIndex, workoutComplete]);
+
+  // Keep the screen on for the whole session: the timer must stay visible.
+  useEffect(() => {
+    if (!activeWorkout) return;
+    activateKeepAwakeAsync('workout');
+    return () => {
+      deactivateKeepAwake('workout');
+    };
+  }, [activeWorkout]);
 
   const startWorkout = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
